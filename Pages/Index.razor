@@ -4,9 +4,15 @@
 
 
 <div class="start-menu shadow">
-    <a href="">Choose </a> a savefile or drop it here!
+    <InputFile id="fileInput" OnChange="OnFileSelected" />
+    <label for="fileInput">Select</label>  a savefile or drop it here!
+    @fileName
 </div>
 
 @code {
+    string fileName ="none";
 
+    void OnFileSelected(IFileListEntry[] files) {
+        fileName = files[0].Name;
+    }
 }
