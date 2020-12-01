@@ -4,18 +4,27 @@
 
 
 <div class=@(isDrag ? "start-menu shadow drag" : "start-menu shadow")>
-    <InputFile @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave" id="fileInput" OnChange="OnFileSelected" />
+    <InputFile accept=".save" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave" id="fileInput" OnChange="OnFileSelected" />
     <label for="fileInput">Select</label>  a savefile or drop it here!
     @fileName
 </div>
 
 @code {
-    private string fileName ="none";
+    private string fileName ="";
     private bool isDrag = false;
 
     void OnFileSelected(IFileListEntry[] files) {
-        fileName = files[0].Name;
         isDrag = false;
+        var info = files[0].Name.Split('.');
+        if(info.Length < 2)
+            return;
+
+        var type = info[1];
+        Console.WriteLine(type);
+        if(type != "save")
+            return;
+            
+        fileName = files[0].Name;
     }
 
     void HandleDragEnter() => isDrag = true;
