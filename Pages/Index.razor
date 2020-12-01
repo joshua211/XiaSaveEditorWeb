@@ -3,16 +3,31 @@
 @inject SaveGameService service
 
 
-<div class="start-menu shadow">
-    <InputFile id="fileInput" OnChange="OnFileSelected" />
+<div class=@(isDrag ? "start-menu shadow drag" : "start-menu shadow")>
+    <InputFile accept=".save" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave" id="fileInput" OnChange="OnFileSelected" />
     <label for="fileInput">Select</label>  a savefile or drop it here!
     @fileName
 </div>
 
 @code {
-    string fileName ="none";
+    private string fileName ="";
+    private bool isDrag = false;
 
     void OnFileSelected(IFileListEntry[] files) {
+        isDrag = false;
+        var info = files[0].Name.Split('.');
+        if(info.Length < 2)
+            return;
+
+        var type = info[1];
+        Console.WriteLine(type);
+        if(type != "save")
+            return;
+            
         fileName = files[0].Name;
     }
+
+    void HandleDragEnter() => isDrag = true;
+
+    void HandleDragLeave() => isDrag = false;
 }
