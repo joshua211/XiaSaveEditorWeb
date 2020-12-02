@@ -1,9 +1,10 @@
 ﻿@page "/"
 @using XiaSaveEditorWeb.Service
 @inject SaveGameService service
+@inject NavigationManager nav
 
 
-<div class=@(isDrag ? "start-menu shadow drag" : "start-menu shadow")>
+<div class=@(isDrag ? "start-menu bordered-background shadow drag" : "start-menu bordered-background shadow")>
     <InputFile accept=".save" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave" id="fileInput" OnChange="OnFileSelected" />
     @if(string.IsNullOrEmpty(fileName))
     {
@@ -19,18 +20,26 @@
     private IFileListEntry file;
     private bool isDrag = false;
 
-    void OnFileSelected(IFileListEntry[] files) {
+    override protected void OnInitialized()
+    {
+       service.OnLoadComplete += () => nav.NavigateTo("./Edit");
+    }
+
+    async Task OnFileSelected(IFileListEntry[] files) {
         isDrag = false;
         var info = files[0].Name.Split('.');
         if(info.Length < 2)
             return;
 
         var type = info[1];
-        Console.WriteLine(type);
         if(type != "save")
             return;
 
-        fileName = files[0].Name;
+        file = files[0];
+        fileName = file.Name;
+        
+        StateHasChanged();
+        await service.LoadSaveFile(file.Data, fileName);
     }
 
     void HandleDragEnter() => isDrag = true;

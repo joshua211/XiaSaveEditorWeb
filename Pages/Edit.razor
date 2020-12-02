@@ -1,0 +1,51 @@
+@page "/Edit"
+@using XiaSaveEditorWeb.Service
+@using XiaSaveFileLib;
+@inject SaveGameService service
+@inject NavigationManager nav
+
+@if(render)
+{
+    <div class="editor bordered-background shadow">
+        <div class="editor-header">
+            <div class="editor-info">
+                <div>
+                    @file.Header.FileName
+                </div>
+                <div>
+                    @file.Header.WriteTime
+                </div>
+            </div>
+            <div class="editor-control">
+                <a href="javascript:;">
+                    <i class="fas fa-save"></i>
+                </a>
+                <a href="javascript:;">
+                    <i class="fas fa-download"></i>
+                </a>
+            </div>
+        </div>
+        <div class="editor-body">
+            @for(int i = 0; i < 50; i++)
+            {
+                <div>Test</div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private bool render = false;
+    private SaveFile file;
+
+    override protected void OnInitialized()
+    {
+        if(service.SaveFile == null)
+            nav.NavigateTo("./");
+        else
+        {
+            render = true;
+            file = service.SaveFile;
+        }
+    }
+}
