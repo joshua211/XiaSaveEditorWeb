@@ -1,0 +1,47 @@
+@typeparam T
+
+<label >@Label</label>
+@for(int i = 0; i < items.Count; i++)
+{ 
+<div class="form-group">
+    <input @onchange=@(args => HandleChange(args, i-1)) type="string" class="form-control" value=@items[i]>
+</div>
+}
+<small class="array-control">
+    <i @onclick="RemoveItem" class="fas fa-minus"></i>
+    <i @onclick="AddItem" class="fas fa-plus"></i>
+</small>
+
+@code {
+    [Parameter]
+    public string Label {get; set;}
+
+    //List<T> because arrays dont work in blazor
+    [Parameter]
+    public Func<List<T>> Get {get; set;}
+    [Parameter]
+    public Action<List<T>> Set{get; set;}
+
+    private List<T> items;
+
+    override protected void OnParametersSet()
+    {
+        items = Get().ToList();
+    }
+
+    private void HandleChange(ChangeEventArgs args, int i)
+    {
+        items[i] = (T) args.Value;
+        Set(items);
+    }
+
+    private void AddItem() => items.Add(default(T));
+    
+    private void RemoveItem()
+    {
+        if(items.Any())
+            items.RemoveAt(items.Count-1);
+    }
+}
+
+        

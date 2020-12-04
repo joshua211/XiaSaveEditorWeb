@@ -1,0 +1,22 @@
+<div class=@(isCollapsed ? "collapsed hidden" :"collapsed")>
+    <div  @onclick="HandleClick" class="collapser"> 
+        @Title
+        <i class=@(isCollapsed ? "fas fa-sort-down" : "fas fa-sort-down transformed")></i>
+    </div>
+    <hr/>
+    <div class="item">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public string Title {get; set;}
+    private bool isCollapsed = true;
+
+    private void HandleClick() {
+        isCollapsed = !isCollapsed;
+    }
+}

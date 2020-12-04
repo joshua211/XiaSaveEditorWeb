@@ -150,6 +150,25 @@ body {
     overflow-y: scroll;
     height: 100%;
     padding: 10px;
+    padding-bottom: 10%;
+    font-family: 'Source Sans Pro';
+}
+
+.editor-body input {
+    width: auto;
+}
+
+.array-control {
+    margin-left: 10px;
+}
+
+.array-control i {
+    margin-right: 20px;
+}
+
+.editor-body .item i:hover {
+    margin-right: 20px;
+    cursor: pointer;
 }
 
 .editor-header {
@@ -193,6 +212,43 @@ body {
     color: black;
 }
 
+.collapsed.hidden {
+    max-height: 50px;
+    overflow: hidden;
+}
+
+.collapsed.hidden .item {
+    opacity: 0;
+}
+
+.collapsed .item {
+    margin-left: 20px;
+    transition: all 500ms linear;
+}
+
+.collapsed {
+    transition: all linear 300ms;
+    max-height: 500em;
+}
+
+.collapser {
+    height: 30px;
+    font-family: "Poppins";
+    font-size: 1.5em;
+}
+
+.collapser:hover {
+    cursor: pointer;
+}
+
+.collapser>i {
+    transition: all linear 200ms;
+    margin-left: 5px;
+}
+
+.fa-sort-down.transformed {
+    transform: rotate(-180deg);
+}
 
 
 @media (max-width: 767.98px) {}
