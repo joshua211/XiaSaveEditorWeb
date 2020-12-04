@@ -1,22 +1,24 @@
 @page "/Edit"
 @using XiaSaveEditorWeb.Service
-@using XiaSaveFileLib;
+@using XiaSaveFileLib
+@using Newtonsoft.Json.Linq
 @inject SaveGameService service
 @inject NavigationManager nav
 
-
+@if(render)
+{
     <div class="editor bordered-background shadow">
         <div class="editor-header">
             <div class="editor-info">
                 <div>
-                    @(file.Header.FileName ?? "test")
+                    @(file.Header.FileName ?? "error")
                 </div>
                 <div>
-                    @(file.Header.WriteTime ?? "test")
+                    @(file.Header.WriteTime ?? "error")
                 </div>
             </div>
             <div class="editor-control">
-                <a href="javascript:;">
+                <a @onclick="Test" href="javascript:;">
                     <i class="fas fa-save"></i>
                 </a>
                 <a href="javascript:;">
@@ -27,10 +29,9 @@
         <div class="editor-body">
             <Collapsed Title="Sect">
                 <form>
-                    <div class="form-group">
-                        <label for="sectName">Sect Name</label>
-                        <input type="text" class="form-control" id="sectName">
-                    </div>
+                    <ValueEdit Label="Sect Prefix" Set=@((v) => fileContent.School.Prefix = v) Get=@(() => fileContent.School.Prefix)/>
+                    <ValueEdit Label="Sect Suffix" Set=@((v) => fileContent.School.Suffix = v) Get=@(() => fileContent.School.Suffix)/>
+                    <ArrayEdit Label="Sect Gongs" T=@string Set=@((v) => fileContent.School.GongList = JArray.FromObject(v)) Get=@(() => fileContent.School.GongList.ToObject<List<string>>())/>
                 </form>
             </Collapsed>
             <Collapsed Title="Disciples">
@@ -38,20 +39,32 @@
             </Collapsed>
         </div>
     </div>
-
+}
 
 @code {
     private bool render = false;
     private SaveFile file;
+    private dynamic fileContent;
 
     override protected void OnInitialized()
     {
-        if(service.SaveFile == null){}
-            //nav.NavigateTo("./");
+        if(service.SaveFile == null)
+            nav.NavigateTo("./");
         else
         {
             render = true;
             file = service.SaveFile;
+            fileContent = JsonConvert.DeserializeObject(file.FileContent);
+
         }
+    }
+
+    private void Test()
+    {
+        System.Console.WriteLine("Name:");
+        Console.WriteLine(fileContent.School.Prefix + " " + fileContent.School.Suffix);
+        System.Console.WriteLine("Laws:");
+        foreach(var l in fileContent.School.GongList)
+            System.Console.WriteLine(l);
     }
 }

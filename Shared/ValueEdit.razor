@@ -1,0 +1,31 @@
+@typeparam T
+
+
+<div class="form-group">
+    <label for=@Label>@Label</label>
+    <input @onchange="HandleChange" type="string" class="form-control" id=@Label value=@Get()>
+</div>
+
+@code {
+    [Parameter]
+    public string Label {get; set;}
+    [Parameter]
+    public Func<T> Get {get; set;}
+    [Parameter]
+    public Action<T> Set{get; set;}
+    private Dictionary<Type, string> typeDict;
+
+    override protected void OnParametersSet()
+    {
+        typeDict = new Dictionary<Type, string>{
+            {typeof(int), "number"},
+            {typeof(string), "text"},
+            {typeof(float), "number"}
+        };
+    }
+
+    private void HandleChange(ChangeEventArgs args) =>
+        Set((T)args.Value);
+}
+
+        

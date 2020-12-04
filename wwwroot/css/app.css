@@ -150,11 +150,25 @@ body {
     overflow-y: scroll;
     height: 100%;
     padding: 10px;
+    padding-bottom: 10%;
     font-family: 'Source Sans Pro';
 }
 
 .editor-body input {
     width: auto;
+}
+
+.array-control {
+    margin-left: 10px;
+}
+
+.array-control i {
+    margin-right: 20px;
+}
+
+.editor-body .item i:hover {
+    margin-right: 20px;
+    cursor: pointer;
 }
 
 .editor-header {
